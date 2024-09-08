@@ -3,6 +3,11 @@
 # dependencies
 node_modules/
 
+# React Native Stack Base
+
+.expo
+__generated__
+
 # Expo
 .expo/
 dist/
