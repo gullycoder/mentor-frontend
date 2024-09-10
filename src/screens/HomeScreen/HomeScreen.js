@@ -3,7 +3,7 @@ import React from "react";
 import { typography, colors, spacing } from "../../styles"; // Import your typography styles
 import { ButtonComponent } from "../../components"; // Import your custom button component
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.sectionTitle}>App Typography</Text>
@@ -21,7 +21,9 @@ const HomeScreen = () => {
       <View style={styles.textBlock}>
         <ButtonComponent
           title="submit"
-          onPress={() => console.log("Button pressed")}
+          onPress={
+            () => navigation.navigate("HomeScreen2") // Navigate to the Login screen
+          }
           variant="accent"
           disabled={false}
         />

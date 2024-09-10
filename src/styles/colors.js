@@ -1,16 +1,18 @@
 export const colors = {
   primary: {
-    light: "#77d579", // Lighter green for hover/disabled states
-    main: "#4ab34c", // Default primary green
-    dark: "#357c36", // Darker green for active states
-    onPrimary: "#ffffff", // Text/icons on primary surfaces (white for contrast)
-  },
-  secondary: {
     light: "#6ca9ff", // Lighter blue for hover/disabled states
     main: "#207cf7", // Default secondary blue
     dark: "#1455b2", // Darker blue for active states
-    onSecondary: "#ffffff", // Text/icons on secondary surfaces
+    onPrimary: "#ffffff", // Text/icons on primary surfaces (white for contrast)
   },
+
+  secondary: {
+    light: "#77d579", // Lighter green for hover/disabled states
+    main: "#4ab34c", // Default primary green
+    dark: "#357c36", // Darker green for active states
+    onSecondary: "#ffffff", /// Text/icons on secondary surfaces
+  },
+
   accent: {
     light: "#ffe5e5", // Lighter pink for subtle highlights
     main: "#fdf1f1", // Default pink for badges or highlights
