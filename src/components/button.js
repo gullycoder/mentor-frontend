@@ -8,14 +8,16 @@ export const ButtonComponent = ({
   onPress,
   variant = "primary",
   disabled = false,
+  style = {}, // Accept custom styles as a prop
+  textStyle = {}, // Accept custom text styles as a prop
 }) => {
-  console.log("ButtonComponent ->title,onpress, variant", variant);
   const buttonStyles = [
     styles.button,
     variant === "primary" && styles.primaryButton,
     variant === "secondary" && styles.secondaryButton,
     variant === "accent" && styles.accentButton,
     disabled && styles.disabledButton,
+    style, // Merge additional custom styles
   ];
 
   const textStyles = [
@@ -24,6 +26,7 @@ export const ButtonComponent = ({
     variant === "secondary" && styles.secondaryButtonText,
     variant === "accent" && styles.accentButtonText,
     disabled && styles.disabledButtonText,
+    textStyle, // Merge additional custom text styles
   ];
 
   return (
@@ -40,12 +43,12 @@ export const ButtonComponent = ({
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: spacing.medium, // Button height based on vertical spacing
-    paddingHorizontal: spacing.large, // Button width based on horizontal spacing
-    borderRadius: 8, // Rounded corners for better aesthetics
+    paddingVertical: spacing.medium,
+    paddingHorizontal: spacing.large,
+    borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 2, // Subtle shadow for depth
+    elevation: 2,
   },
   primaryButton: {
     backgroundColor: colors.primary.main,
@@ -57,23 +60,21 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent.main,
   },
   disabledButton: {
-    backgroundColor: colors.background.dark, // Subtle background for disabled
+    backgroundColor: colors.background.dark,
   },
   buttonText: {
-    ...typography.button, // Typography defined in the typography file
+    ...typography.button,
   },
   primaryButtonText: {
-    color: colors.primary.onPrimary, // Text color for primary buttons
+    color: colors.primary.onPrimary,
   },
   secondaryButtonText: {
-    color: colors.secondary.onSecondary, // Text color for secondary buttons
+    color: colors.secondary.onSecondary,
   },
   accentButtonText: {
-    color: colors.accent.onAccent, // Text color for accent buttons
+    color: colors.accent.onAccent,
   },
   disabledButtonText: {
-    color: colors.text.disabled, // Disabled text color
+    color: colors.text.disabled,
   },
 });
-
-// export default ButtonComponent;

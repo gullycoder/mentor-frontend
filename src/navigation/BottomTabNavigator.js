@@ -14,7 +14,7 @@ const BottomTabNavigator = () => {
         headerShown: false,
       }}
     >
-      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      {/* <Tab.Screen name="Home" component={HomeStackNavigator} /> */}
       <Tab.Screen name="Questions" component={QuestionStackNavigator} />
       <Tab.Screen name="Mentorship" component={MentorshipStackNavigator} />
       <Tab.Screen name="Profile" component={ProfileStackNavigator} />

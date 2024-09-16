@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { ButtonComponent } from "../components/button"; // Reuse your ButtonComponent
-import { colors, typography } from "../styles"; // Your app's design tokens
+import { ButtonComponent } from "../button"; // Reuse your ButtonComponent
+import { colors, typography } from "../../styles"; // Your app's design tokens
 
 export const UniversalModal = ({
   visible,
@@ -32,13 +32,15 @@ export const UniversalModal = ({
             <ButtonComponent
               title={cancelText}
               onPress={onClose}
-              style={styles.cancelButton}
+              // style={styles.cancelButton}
+              variant="secondary"
             />
             {showConfirmButton && (
               <ButtonComponent
                 title={confirmText}
                 onPress={onConfirm}
-                style={styles.confirmButton}
+                // style={styles.confirmButton}
+                variant="secondary"
               />
             )}
           </View>
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: colors.background, // Solid background color (white)
+    backgroundColor: colors.background.default, // Solid background color (white)
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
   },
   errorContainer: {
-    backgroundColor: colors.errorBackground, // Different background color for error modals
+    backgroundColor: colors.error, // Different background color for error modals
   },
   title: {
     fontSize: typography.h2, // Heading 2 size
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     color: colors.error, // Color for error title
   },
   message: {
-    fontSize: typography.body, // Body text size
+    // fontSize: typography.body, // Body text size
     textAlign: "center",
     marginBottom: 20,
     color: colors.textPrimary, // Primary text color

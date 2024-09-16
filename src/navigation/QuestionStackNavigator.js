@@ -15,7 +15,7 @@ const QuestionStackNavigator = () => {
         headerShown: false,
       }}
     >
-      <stack.Screen name="QuestionHomeScreen" component={QuestionHomeScreen} />
+      {/* <stack.Screen name="QuestionHomeScreen" component={QuestionHomeScreen} />s */}
       <stack.Screen
         name="QuestionDetailScreen"
         component={QuestionDetailScreen}
