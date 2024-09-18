@@ -4,6 +4,7 @@ import {
   QuestionHomeScreen,
   QuestionDetailScreen,
   QuestionResultScreen,
+  QuestionFilterScreen,
 } from "../screens/QuestionScreen";
 
 const stack = createNativeStackNavigator();
@@ -15,7 +16,11 @@ const QuestionStackNavigator = () => {
         headerShown: false,
       }}
     >
-      {/* <stack.Screen name="QuestionHomeScreen" component={QuestionHomeScreen} />s */}
+      <stack.Screen name="QuestionHomeScreen" component={QuestionHomeScreen} />
+      <stack.Screen
+        name="QuestionFilterScreen"
+        component={QuestionFilterScreen}
+      />
       <stack.Screen
         name="QuestionDetailScreen"
         component={QuestionDetailScreen}

@@ -3,7 +3,7 @@ import React from "react";
 import { ButtonComponent } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/slices/userSlice";
+import { getQuestions, setUser, getQuestionFilterOption } from "../../redux";
 
 const ProfileEditScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -18,6 +18,19 @@ const ProfileEditScreen = ({ navigation }) => {
     // Navigate to the Splash screen
     navigation.navigate("Auth");
   };
+  handelFetchQuestions = () => {
+    const query = {
+      limit: 10,
+      page: 1,
+    };
+    dispatch(getQuestions(query));
+  };
+
+  const handelFetchFilterOptions = () => {
+    console.log("fetching filter options");
+    dispatch(getQuestionFilterOption());
+  };
+
   return (
     <View
       style={{
@@ -28,6 +41,11 @@ const ProfileEditScreen = ({ navigation }) => {
     >
       {/* <Text>ProfileEditScreen</Text> */}
       <ButtonComponent title="Logout" onPress={handleLogout} />
+      <ButtonComponent title="Fetch Questions" onPress={handelFetchQuestions} />
+      <ButtonComponent
+        title="fetch filter options"
+        onPress={handelFetchFilterOptions}
+      />
     </View>
   );
 };

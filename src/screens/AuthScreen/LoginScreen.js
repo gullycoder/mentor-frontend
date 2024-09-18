@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, Alert, ActivityIndicator, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { getOtp, verifyOtp, setError } from "../../redux"; // Import the thunks
 import {
   Input,
   ButtonComponent,
   UniversalModal,
   OtpInput,
 } from "../../components";
-import { getOtp, verifyOtp } from "../../redux"; // Import the thunks
-import { setLoading, setError } from "../../redux"; // Import the actions
 import { styles } from "./style"; // Import the styles
 
 const LoginScreen = ({ navigation }) => {
@@ -102,7 +101,7 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/images/login.png")} // Path to your background image
+        source={require("../../assets/images/login.png")} // Path to background image
         // style={styles.backgroundImage}
         resizeMode="cover"
         style={styles.image}

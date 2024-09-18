@@ -20,10 +20,9 @@ const SplashScreen = ({ navigation }) => {
         // If auth token is found, navigate to HomeScreen
         if (authToken) {
           //get the user details from the token and store it in redux state
-          const userInfo = JSON.parse(authToken).user;
-          const user = { userInfo };
-          console.log("user", user);
-          dispatch(setUser(user));
+          const userInfo = JSON.parse(authToken);
+          console.log("user", userInfo);
+          dispatch(setUser(userInfo));
           navigation.replace("Main");
         } else {
           // If no token, navigate to LoginScreen
