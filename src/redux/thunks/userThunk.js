@@ -1,14 +1,15 @@
 import { setUser, setLoading, setError } from "../slices/userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL as TEMP_API_URL } from "../../temp/api";
+import { fetchApiResponse } from "../../services/apiCall";
 
 //import your API URL here from .env file
 
 const getOtp = (email) => async (dispatch) => {
-  const API_URL = TEMP_API_URL;
+  const url = `${TEMP_API_URL || process.env.API_URL}/rules/getRules`;
   try {
     dispatch(setLoading(true));
-    const response = await fetch(`${API_URL}/api/v1/users/register`, {
+    const response = await fetchApiResponse(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,10 +35,10 @@ const getOtp = (email) => async (dispatch) => {
 };
 
 const verifyOtp = (email, otp) => async (dispatch) => {
-  const API_URL = process.env.API_URL || TEMP_API_URL;
+  const url = `${TEMP_API_URL || process.env.API_URL}/users/login`;
   try {
     dispatch(setLoading(true));
-    const response = await fetch(`${API_URL}/api/v1/users/login`, {
+    const response = await fetchApiResponse(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -55,6 +56,7 @@ const verifyOtp = (email, otp) => async (dispatch) => {
     const authTokenDetails = {
       accessToken: data.data.accessToken,
       user: data.data.user,
+      refreshToken: data.data.refreshToken,
     };
     const jasonValueofAuthToken = JSON.stringify(authTokenDetails);
     console.log("token", jasonValueofAuthToken);

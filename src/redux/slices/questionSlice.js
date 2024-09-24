@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  questions: [],
-  isLoading: false,
-  error: null,
+  questions: {},
+  isQuestionsLoading: false,
+  questionsError: null,
 };
 
 const questionSlice = createSlice({
@@ -11,13 +11,14 @@ const questionSlice = createSlice({
   initialState,
   reducers: {
     setQuestions: (state, action) => {
+      console.log("questionslice is running");
       state.questions = action.payload;
     },
     setQuestionsLoading: (state, action) => {
-      state.isLoading = action.payload;
+      state.isQuestionsLoading = action.payload;
     },
     setQuestionsError: (state, action) => {
-      state.error = action.payload;
+      state.questions = action.payload;
     },
   },
 });

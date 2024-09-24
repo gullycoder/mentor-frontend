@@ -5,6 +5,16 @@ export {
   setQuestionsLoading,
   setQuestionsError,
 } from "./slices/questionSlice";
+export { setRules, setRulesLoading, setRulesError } from "./slices/ruleSlice";
+export {
+  setAttemptedQuestions,
+  setAttemptedQuestionsLoading,
+  setAttemptedQuestionsError,
+} from "./slices/attemptedQuestionSlice";
 export { getOtp, verifyOtp } from "./thunks/userThunk";
+export { getRules } from "./thunks/ruleThunk";
 export { getQuestions } from "./thunks/questionThunk";
-export { getQuestionFilterOption } from "./thunks/questionFilterOptionThunk";
+export {
+  getQuestionAttemptedByUser,
+  submitQuestionAttemptedByUser,
+} from "./thunks/attemptedQuestionThunk";

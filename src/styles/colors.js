@@ -1,16 +1,30 @@
 export const colors = {
   primary: {
-    light: "#6ca9ff", // Lighter blue for hover/disabled states
-    main: "#207cf7", // Default secondary blue
-    dark: "#1455b2", // Darker blue for active states
-    onPrimary: "#ffffff", // Text/icons on primary surfaces (white for contrast)
+    lightest: "#a3cfff", // Softest light blue tint, good for backgrounds or subtle highlights
+    lighter: "#6ca9ff", // Original light blue, ideal for hover/disabled states
+    light: "#4d98ff", // Slightly deeper light blue, for buttons or active links
+    main: "#207cf7", // Default primary blue, used for main buttons and primary actions
+    mediumDark: "#1a66cc", // Medium blue, good for focus or hover states on darker backgrounds
+    dark: "#1455b2", // Original dark blue, for active states or selected elements
+    darker: "#0e3e85", // Very dark blue, used for shadow or deep accents
+    darkest: "#082957", // Almost navy, for very deep contrast areas
+    tint1: "#e5f0ff", // Lightest blue tint, useful for backgrounds or cards
+    tint2: "#cfe0ff", // Slightly stronger tint, good for section highlights
+    onPrimary: "#ffffff", // White text/icons on primary surfaces
   },
 
   secondary: {
-    light: "#77d579", // Lighter green for hover/disabled states
-    main: "#4ab34c", // Default primary green
-    dark: "#357c36", // Darker green for active states
-    onSecondary: "#ffffff", /// Text/icons on secondary surfaces
+    lightest: "#b8e8b9", // Softest green tint, good for backgrounds or subtle highlights
+    lighter: "#77d579", // Original lighter green, great for hover/disabled states
+    light: "#65cc66", // Slightly deeper light green, for buttons or active elements
+    main: "#4ab34c", // Default primary green, for primary buttons and actions
+    mediumDark: "#419c42", // A more saturated green for hover/focus states
+    dark: "#357c36", // Original darker green, for active buttons or selected states
+    darker: "#2a5f2b", // Deeper green for shadow accents or strong contrasts
+    darkest: "#1e431f", // Almost forest green, great for very deep contrasts
+    tint1: "#e7f5e8", // Light green tint for backgrounds or cards
+    tint2: "#cef0d0", // Stronger green tint for section highlights or subtle dividers
+    onSecondary: "#ffffff", // White text/icons on secondary surfaces
   },
 
   accent: {
@@ -20,12 +34,21 @@ export const colors = {
     onAccent: "#333333", // Dark text on accent-colored backgrounds
   },
   background: {
-    default: "#f9f9fb", // Default off-white background for the app
-    light: "#ffffff", // Pure white for cards/elevated sections
-    dark: "#e1e1e4", // Darker variant for sidebars/footers
-    darker: "#c4c4c7", // Darkest variant for deep sections (used sparingly)
+    lightest: "#ffffff", // Brightest white, used for the most elevated sections like cards or modals
+    lighter: "#fcfcfd", // Very soft off-white, ideal for lightly raised sections
+    default: "#f9f9fb", // Default off-white, used for main app background
+    mediumLight: "#f0f0f2", // A soft light grey, good for background areas that need subtle contrast
+    light: "#eeeeee", // A muted light grey, to define elevated elements or containers
+    medium: "#dcdce0", // A slightly darker shade for section breaks or lightly shaded areas
+    dark: "#e1e1e4", // A darker variant for sidebars or headers, still light enough for readability
+    darker: "#c4c4c7", // Darkest variant for deeper sections or footers
+    darkest: "#a5a5a8", // Darker grey for strong background contrast or dividers
+    shadow: "#f1f1f1", // Very soft shadow background for depth effects
+    tint1: "#f7f7f9", // A subtle tint for slightly raised backgrounds
+    tint2: "#ebebee", // A slightly more prominent tint for section highlights
     onBackground: "#333333", // Dark text/icons on background surfaces
   },
+
   surface: {
     light: "#ffffff", // Light surface color (e.g., for cards, sheets)
     dark: "#e1e1e4", // Darker surface variant

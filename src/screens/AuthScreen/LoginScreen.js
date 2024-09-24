@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Alert, ActivityIndicator, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getOtp, verifyOtp, setError } from "../../redux"; // Import the thunks
+import { getOtp, verifyOtp, getRules, setError } from "../../redux"; // Import the thunks
 import {
   Input,
   ButtonComponent,
@@ -46,6 +46,7 @@ const LoginScreen = ({ navigation }) => {
         setisOtpRequested(false);
         setIsEmailInputDisabled(false);
         dispatch(setError(null));
+        await dispatch(getRules());
         //navigate to the home screen
         navigation.navigate("Main");
       } else {

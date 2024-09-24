@@ -3,52 +3,66 @@ import {
   setQuestionsError,
   setQuestionsLoading,
 } from "../slices/questionSlice";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL as TEMP_API_URL } from "../../temp/api";
+import ApiError from "../../utils/ApiError";
+import { fetchApiResponse } from "../../services/apiCall";
+import * as Sentry from "@sentry/react"; // Sentry for error tracking
+import { useSelector } from "react-redux"; // Use this to get user info from Redux
 
-export const getQuestions = (query) => async (dispatch) => {
-  const API_URL = process.env.API_URL || TEMP_API_URL;
+const getQuestions = (query) => async (dispatch, getState) => {
+  const url = `${TEMP_API_URL || process.env.API_URL}/questions/getQuestions`;
+
   try {
-    // Retrieve the token from AsyncStorage
-    // const token = await AsyncStorage.getItem('authToken');
-    const authToken = await AsyncStorage.getItem("authToken");
-    if (!authToken) {
-      throw new Error("No token found");
+    // Get userInfo from the userSlice in Redux
+    const { userInfo } = getState().user; // Access user slice from the Redux store
+    // Check if userInfo exists
+    if (!userInfo || !userInfo.accessToken) {
+      throw new ApiError(null, "No user information found");
     }
-    const token = JSON.parse(authToken).accessToken;
+
+    const token = userInfo.accessToken;
 
     // Set headers
     const headers = {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Add the token to the Authorization header
     };
 
-    // Add Authorization header if the token is available
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-    dispatch(setQuestionsLoading(true));
-    const response = await fetch(`${API_URL}/api/v1/questions/getQuestions`, {
+    dispatch(setQuestionsLoading(true)); // Set loading state to true
+
+    // Fetch API response
+    const response = await fetchApiResponse(url, {
       method: "GET",
       headers: headers,
       query: JSON.stringify(query),
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch questions");
-    }
-
-    const data = await response.json();
-    console.log("data received in question", data);
-    dispatch(setQuestions(data.data));
+    const [data] = response?.data || []; // the first element of the array
+    const question =
+      {
+        questions: data?.questions || [],
+        totalQuestions: data?.totalCount || 0,
+      } || {};
+    console.log("data received in question", question);
+    dispatch(setQuestions(question)); // Dispatch the success action with questions data
+    return response.data; // Return the data to the calling function
   } catch (error) {
-    console.error("get questionError", error);
-    dispatch(setQuestionsError(error.toString()));
+    console.error("getQuestions error:", error);
+
+    // Capture the error in Sentry
+    Sentry.captureException(error);
+
+    // Check if the error is an instance of ApiError for more structured error handling
+    if (error instanceof ApiError) {
+      error.logError(); // Log the error for further debugging
+      dispatch(setQuestionsError(error.message)); // Dispatch error to update state
+    } else {
+      // If the error is not an instance of ApiError, handle it as an unexpected error
+      console.error("Unexpected error:", error);
+      dispatch(setQuestionsError(error.message || "An unknown error occurred"));
+    }
   } finally {
-    dispatch(setQuestionsLoading(false));
+    dispatch(setQuestionsLoading(false)); // Set loading state to false after error or success
   }
 };
 
-const questionThunk = {
-  getQuestions,
-};
-export default questionThunk;
+export { getQuestions };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,57 +10,74 @@ import {
 import { ButtonComponent } from "../components/button"; //
 import { colors, typography, spacing } from "../styles";
 
-export const QuestionCard = ({ currentQuestion }) => {
-  console.log("currentQuestion", currentQuestion);
+export const QuestionCard = ({
+  currentQuestion,
+  attemptedQuestion,
+  setAttemptedQuestions,
+}) => {
   const [selectedOption, setSelectedOption] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
 
-  // Reset state when the question changes
-  React.useEffect(() => {
-    setSelectedOption(null);
-    setSubmitted(false);
-    setShowExplanation(false);
-  }, [currentQuestion]);
+  // Combined useEffect to load selected option when question changes
+  useEffect(() => {
+    const attempted = attemptedQuestion.find(
+      (question) => question.questionId === currentQuestion._id
+    );
+
+    if (attempted) {
+      setSelectedOption(attempted.selectedOption); // Load the previously selected option
+    } else {
+      setSelectedOption(null); // Reset selected option for new question
+    }
+
+    setShowExplanation(false); // Reset explanation when question changes
+  }, [currentQuestion, attemptedQuestion]);
+
+  const isCorrect = selectedOption === currentQuestion?.questionCorrectOption;
+  const correctOption = currentQuestion?.questionCorrectOption;
 
   const handleOptionSelect = (optionKey) => {
+    // Set the selected option
     setSelectedOption(optionKey);
-  };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
+    // Immediately store the attempted question after selecting an option
+    setAttemptedQuestions((prev) => [
+      ...prev.filter((question) => question.questionId !== currentQuestion._id),
+      {
+        questionId: currentQuestion._id,
+        selectedOption: optionKey,
+        isCorrect: optionKey === correctOption,
+        questionTopic: currentQuestion.questionTopic,
+        questionSubtopic: currentQuestion.questionSubtopic,
+      },
+    ]);
   };
-
-  const isCorrect = selectedOption === currentQuestion.questionCorrectOption;
-  const correctOption = currentQuestion.questionCorrectOption;
 
   return (
     <ScrollView>
       {/* Question Info */}
-      <Text style={styles.questionText}>{currentQuestion.questionText}</Text>
-      {currentQuestion.questionYear && (
+      <Text style={styles.questionText}>{currentQuestion?.questionText}</Text>
+      {currentQuestion?.questionYear && (
         <Text style={styles.questionYear}>
-          {currentQuestion.questionSource} {currentQuestion.questionYear}
+          {currentQuestion?.questionSource} {currentQuestion?.questionYear}
         </Text>
       )}
 
-      {currentQuestion.questionImage && (
+      {currentQuestion?.questionImage && (
         <Image
-          source={{ uri: currentQuestion.questionImage }}
+          source={{ uri: currentQuestion?.questionImage }}
           style={styles.questionImage}
         />
       )}
 
       {/* Options */}
       <View style={styles.optionsContainer}>
-        {Object.entries(currentQuestion.questionOptions).map(
+        {Object.entries(currentQuestion?.questionOptions).map(
           ([key, option]) => {
             let optionStyle = styles.optionButton;
-            // Highlight selected option before submission
-            if (key === selectedOption && !submitted) {
-              optionStyle = styles.selectedOption;
-            }
-            if (submitted) {
+
+            // Determine option style based on correctness and selected option
+            if (selectedOption) {
               if (key === correctOption) {
                 optionStyle = styles.correctOption;
               } else if (
@@ -76,7 +93,7 @@ export const QuestionCard = ({ currentQuestion }) => {
                 key={key}
                 style={optionStyle}
                 onPress={() => handleOptionSelect(key)}
-                disabled={submitted}
+                disabled={!!selectedOption} // Disable options after one is selected
               >
                 <Text style={styles.optionText}>
                   {key.toUpperCase()}. {option}
@@ -87,16 +104,10 @@ export const QuestionCard = ({ currentQuestion }) => {
         )}
       </View>
 
-      {/* Submit and Explanation */}
-      {!submitted ? (
+      {/* Explanation Button */}
+      {selectedOption && (
         <ButtonComponent
-          title="Submit"
-          onPress={handleSubmit}
-          disabled={!selectedOption}
-        />
-      ) : (
-        <ButtonComponent
-          title="Show Explanation"
+          title="Details"
           onPress={() => setShowExplanation(true)}
           variant="accent"
         />
@@ -106,11 +117,11 @@ export const QuestionCard = ({ currentQuestion }) => {
       {showExplanation && (
         <View style={styles.explanationContainer}>
           <Text style={styles.explanationText}>
-            {currentQuestion.questionAnswerExplanation}
+            {currentQuestion?.questionAnswerExplanation}
           </Text>
-          {currentQuestion.questionAnswerExplanationImage && (
+          {currentQuestion?.questionAnswerExplanationImage && (
             <Image
-              source={{ uri: currentQuestion.questionAnswerExplanationImage }}
+              source={{ uri: currentQuestion?.questionAnswerExplanationImage }}
               style={styles.explanationImage}
             />
           )}
@@ -158,22 +169,16 @@ const styles = StyleSheet.create({
     marginBottom: spacing.small,
     backgroundColor: colors.surface.light,
   },
-  selectedOption: {
-    padding: spacing.smallMedium,
-    borderRadius: spacing.small,
-    backgroundColor: colors.shadows.light, // Highlight for selected option before submission
-    marginBottom: spacing.small,
-  },
   correctOption: {
     padding: spacing.smallMedium,
     borderRadius: spacing.small,
-    backgroundColor: colors.success.light, // Highlight for correct option after submission
+    backgroundColor: colors.success.light, // Highlight for correct option
     marginBottom: spacing.small,
   },
   wrongOption: {
     padding: spacing.smallMedium,
     borderRadius: spacing.small,
-    backgroundColor: colors.error.light, // Highlight for wrong option after submission
+    backgroundColor: colors.error.light, // Highlight for wrong option
     marginBottom: spacing.small,
   },
   optionText: {

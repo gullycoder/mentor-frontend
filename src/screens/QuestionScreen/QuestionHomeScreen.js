@@ -10,24 +10,23 @@ import {
 } from "react-native";
 import { TypingText } from "../../components";
 import { colors, spacing, typography } from "../../styles"; // Import your custom styles
+import { useSelector } from "react-redux";
 
 // Data for the changing text
 const typingText = [
-  "Peehu is good girl",
-  "Arjun is good boy",
-  "Amyra is kind girl",
+  "to get 115+ in Pre",
+  "to Remember Facts",
+  "to avoid Exam Surprises",
 ];
 
 // Data for the grid
-girdArray = [
-  "Previous Year Papers",
-  "Mock Tests.. Upcoming",
-  "Other Exam... upcoming",
-];
+girdArray = ["UPSC", "HPSC", "RPSC", "UPPSC"];
 // Screen Dimensions
 const { height, width } = Dimensions.get("window");
 
 const QuestionHomeScreen = ({ navigation }) => {
+  // Get the rules details from the redux state
+  const { rules } = useSelector((state) => state.rule);
   return (
     <View style={styles.container}>
       {/* Background Image Section */}
@@ -38,7 +37,7 @@ const QuestionHomeScreen = ({ navigation }) => {
         <View style={styles.backgroundView}>
           {/* Fixed Text Section */}
           <View style={styles.fixedTextContainer}>
-            <Text style={styles.fixedText}>Practice for </Text>
+            <Text style={styles.fixedText}>Practice </Text>
             <View>
               <TypingText textArray={typingText} />
             </View>
@@ -65,7 +64,16 @@ const QuestionHomeScreen = ({ navigation }) => {
                     )
                   }
                 >
-                  <Text style={styles.blockText}>{source}</Text>
+                  <Text
+                    style={[styles.blockText, { color: colors.primary.main }]}
+                  >
+                    {source}
+                  </Text>
+                  <Text
+                    style={[styles.blockText]} // Change the color of the text
+                  >
+                    {"PYQs"}
+                  </Text>
                 </TouchableOpacity>
               </View>
             ))}

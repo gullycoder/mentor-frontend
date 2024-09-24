@@ -5,3 +5,5 @@ export { OtpInput } from "./otpInput";
 export { QuestionCard } from "./mcq";
 export { Dropdown } from "./dropdown";
 export { TypingText } from "./typingText";
+export { LoadingIndicator } from "./loader";
+export { LoadingOverlay } from "./loadingOverlay";
