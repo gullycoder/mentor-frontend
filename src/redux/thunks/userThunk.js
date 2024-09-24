@@ -6,7 +6,7 @@ import { fetchApiResponse } from "../../services/apiCall";
 //import your API URL here from .env file
 
 const getOtp = (email) => async (dispatch) => {
-  const url = `${TEMP_API_URL || process.env.API_URL}/rules/getRules`;
+  const url = `${process.env.API_URL || TEMP_API_URL}/users/register`;
   try {
     dispatch(setLoading(true));
     const response = await fetchApiResponse(url, {
@@ -16,17 +16,16 @@ const getOtp = (email) => async (dispatch) => {
       },
       body: JSON.stringify({ email }),
     });
-
-    if (!response.ok) {
+    // console.log("getOtp -> response", response);
+    if (!response.success) {
       throw new Error("Failed to send OTP");
     }
-
-    const data = await response.json();
     // No need to update the Redux state with OTP, just handle the UI
     //return success message;
     return { message: "OTP sent successfully", success: true };
   } catch (error) {
     dispatch(setError(error.toString()));
+    console.log("getOtp -> error", error);
     //return error;
     return { message: "Failed to send OTP", success: false };
   } finally {
@@ -47,16 +46,15 @@ const verifyOtp = (email, otp) => async (dispatch) => {
     });
 
     console.log("verifyOtp -> response", response);
-    const data = await response.json();
-    console.log("verifyOtp -> data", data);
-    if (!response.ok) {
-      throw new Error(data.message);
+    if (!response.success) {
+      console.log("if block verifyOtp");
+      throw new Error(response.message);
     }
 
     const authTokenDetails = {
-      accessToken: data.data.accessToken,
-      user: data.data.user,
-      refreshToken: data.data.refreshToken,
+      accessToken: response.data.accessToken,
+      user: response.data.user,
+      refreshToken: response.data.refreshToken,
     };
     const jasonValueofAuthToken = JSON.stringify(authTokenDetails);
     console.log("token", jasonValueofAuthToken);

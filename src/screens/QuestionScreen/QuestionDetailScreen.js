@@ -13,7 +13,7 @@ import { QuestionCard } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { submitQuestionAttemptedByUser } from "../../redux";
 import { styles as screenStyles } from "./styles";
-import { colors, typography, spacing } from "../../styles"; // Assuming these are the color and typography styles you shared
+import { colors, typography, spacing } from "../../styles";
 
 const QuestionDetailScreens = ({ navigation }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -87,43 +87,6 @@ const QuestionDetailScreens = ({ navigation }) => {
       );
     }
   };
-
-  // Call handleSubmitQuiz when app state changes
-  // useEffect(() => {
-  //   const handleAppStateChange = (nextAppState) => {
-  //     if (
-  //       appState.current.match(/inactive|background/) &&
-  //       nextAppState === "active"
-  //     ) {
-  //       console.log("App has come to the foreground");
-  //     }
-
-  //     if (
-  //       appState.current.match(/active/) &&
-  //       nextAppState.match(/background|inactive/)
-  //     ) {
-  //       console.log("App is going to the background or inactive");
-  //       handleSubmitQuiz(); // Call handleSubmitQuiz when app goes to the background
-  //     }
-  //     appState.current = nextAppState;
-  //   };
-
-  //   const appStateSubscription = AppState.addEventListener(
-  //     "change",
-  //     handleAppStateChange
-  //   );
-
-  //   return () => {
-  //     appStateSubscription.remove();
-  //   };
-  // }, []);
-
-  // Call handleSubmitQuiz when the component unmounts
-  // useEffect(() => {
-  //   return () => {
-  //     handleSubmitQuiz();
-  //   };
-  // }, []);
 
   // Render the question number indicators inside a horizontal ScrollView
   const renderQuestionIndicators = () => {

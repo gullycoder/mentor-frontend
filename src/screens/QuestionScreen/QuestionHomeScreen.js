@@ -8,7 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { TypingText } from "../../components";
+import { ButtonComponent, TypingText } from "../../components";
 import { colors, spacing, typography } from "../../styles"; // Import your custom styles
 import { useSelector } from "react-redux";
 
@@ -78,6 +78,10 @@ const QuestionHomeScreen = ({ navigation }) => {
               </View>
             ))}
           </View>
+          <ButtonComponent // Button to navigate to the QuestionResultScreen
+            title="View Results"
+            onPress={() => navigation.navigate("QuestionResultScreen")}
+          />
         </View>
       </ScrollView>
     </View>

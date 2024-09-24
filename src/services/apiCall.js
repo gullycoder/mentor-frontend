@@ -14,7 +14,6 @@ export const fetchApiResponse = async (
   retries = 2,
   debug = false
 ) => {
-  console.log("fetchApiResponse called", url);
   if (debug) console.log("Fetching URL:", url);
 
   try {
@@ -30,25 +29,52 @@ export const fetchApiResponse = async (
     };
 
     const response = await fetch(url, options);
+    console.log("fetchApiResponse -> response", response);
+
+    const contentType = response.headers.get("content-type");
+    let responseData;
+
+    // Read the response body only once
+    if (contentType && contentType.includes("application/json")) {
+      responseData = await response.json();
+    } else {
+      responseData = await response.text(); // Fallback for non-JSON responses
+    }
 
     if (!response.ok) {
       console.log("response is not ok in fetchapi");
-      const errorData = await response.json();
-      console.log("errorData in fetchapi", errorData);
-      console.log("response.status in fetchapi", response);
-      throw new ApiError(
-        response.status,
-        errorData.message || "An unexpected error occurred",
-        errorData.errors || []
-      );
+
+      if (contentType && contentType.includes("application/json")) {
+        responseData;
+      } else if (contentType && contentType.includes("text/html")) {
+        console.error("HTML Error Response:", responseData);
+        responseData.message = `Non-JSON response received: ${responseData.substring(
+          0,
+          100
+        )}...`;
+        throw new ApiError(
+          response.status,
+          "An HTML error occurred. Please check the server or ngrok configuration."
+        );
+      } else {
+        console.log("responseData in fetchapi", responseData);
+        console.log("response.status in fetchapi", response);
+        throw new ApiError(
+          response.status,
+          responseData.message || "An unexpected error occurred",
+          responseData.errors || []
+        );
+      }
     }
-    return await response.json();
+
+    console.log("fetchApiResponse -> responseData", responseData);
+    return responseData;
   } catch (error) {
+    console.log("fetchApiResponse error", error);
     if (debug) {
       console.error("fetchApiResponse error:", error);
     }
-    if (error.status === 401 && retries > 0) {
-      console.log("401 error in fetchapi", error);
+    if (error.statusCode === 401 && retries > 0) {
       // Handle access token expiration (HTTP 401 Unauthorized)
       console.log("Access token expired, trying to refresh...");
 
@@ -56,7 +82,7 @@ export const fetchApiResponse = async (
         // Attempt to refresh the access token
         const refreshEndPoint = `${
           TEMP_API_URL || process.env.API_URL
-        }/user/refreshToken`;
+        }/users/refreshToken`;
         const newAccessToken = await refreshAccessToken(refreshEndPoint);
 
         if (newAccessToken) {
@@ -85,6 +111,7 @@ export const fetchApiResponse = async (
       error.logError();
       throw error;
     } else {
+      console.error("Unknown error occurred:", error);
       throw new ApiError(null, "An unknown error occurred");
     }
   }

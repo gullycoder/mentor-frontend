@@ -18,9 +18,11 @@ export const refreshAccessToken = async (refreshEndPoint) => {
   try {
     // Retrieve the refresh token from AsyncStorage
     const authTokenDetails = await getAuthToken();
+    console.log("authTokenDetails", authTokenDetails);
     const { refreshToken } = authTokenDetails || {};
 
     if (!refreshToken) {
+      console.log("Refresh token not found wala block");
       throw new Error("Refresh token not found");
     }
 

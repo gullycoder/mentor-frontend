@@ -16,7 +16,6 @@ const getRules = () => async (dispatch) => {
       filterOptions: rulesData?.ruleDetails || {},
       typingText: rulesData?.typingText || {},
     };
-    console.log("getRules getting filterOptions block", filterOptions);
 
     dispatch(setRules(filterOptions)); // Dispatch the success action with rules data
   } catch (error) {

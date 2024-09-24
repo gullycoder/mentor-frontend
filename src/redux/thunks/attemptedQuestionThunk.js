@@ -10,10 +10,10 @@ import * as Sentry from "@sentry/react"; // Sentry for error tracking
 
 // Thunk to get attempted questions
 
-const getQuestionAttemptedByUser = () => async (dispatch) => {
+const getTotalQuestionsAttemptedByUser = () => async (dispatch) => {
   const url = `${
     TEMP_API_URL || process.env.API_URL
-  }/questionAttempts/getQuestionAttemptedByUser`;
+  }/questionAttempts/getTotalQuestionsAttemptedByUser`;
   // Get userInfo from the userSlice in Redux
   const { userInfo } = getState().user; // Access user slice from the Redux store
   try {
@@ -81,4 +81,4 @@ const submitQuestionAttemptedByUser =
     }
   };
 
-export { getQuestionAttemptedByUser, submitQuestionAttemptedByUser };
+export { getTotalQuestionsAttemptedByUser, submitQuestionAttemptedByUser };

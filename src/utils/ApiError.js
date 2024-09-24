@@ -7,11 +7,12 @@ class ApiError extends Error {
     data = null
   ) {
     super(message);
-    this.statusCode = statusCode;
+    this.statusCode = statusCode; // For those who prefer statusCode
+    this.status = statusCode; // Convenience for quick access to status code, later need to clean and use only stausCode
     this.errors = errors;
     this.success = false;
     this.data = data; // Additional error-related data
-
+    console.log("ApiError this", this);
     if (stack) {
       this.stack = stack;
     } else {
