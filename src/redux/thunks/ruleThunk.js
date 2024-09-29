@@ -1,14 +1,14 @@
 import { setRules, setRulesError, setRulesLoading } from "../slices/ruleSlice";
-import { fetchApiResponse } from "../../services/apiCall";
+import { apiCall } from "../../services/apiCall";
 import { API_URL as TEMP_API_URL } from "../../temp/api";
 import ApiError from "../../utils/ApiError";
 
 const getRules = () => async (dispatch) => {
-  const url = `${TEMP_API_URL || process.env.API_URL}/rules/getRules`;
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/rules/getRules`;
 
   try {
     dispatch(setRulesLoading(true)); // Set loading state to true
-    const response = await fetchApiResponse(url); // Fetch API response
+    const response = await apiCall(url); // Fetch API response
     // console.log("getRules getting data block", response);
 
     const rulesData = response?.data?.[0] || {};

@@ -5,45 +5,26 @@ import {
 } from "../slices/questionSlice";
 import { API_URL as TEMP_API_URL } from "../../temp/api";
 import ApiError from "../../utils/ApiError";
-import { fetchApiResponse } from "../../services/apiCall";
+import { apiCall } from "../../services/apiCall";
 import * as Sentry from "@sentry/react"; // Sentry for error tracking
 import { useSelector } from "react-redux"; // Use this to get user info from Redux
 
 const getQuestions = (query) => async (dispatch, getState) => {
-  const url = `${TEMP_API_URL || process.env.API_URL}/questions/getQuestions`;
+  const url = `${process.env.EXPO_PUBLIC_API_URL}/questions/getQuestions`;
 
   try {
-    // Get userInfo from the userSlice in Redux
-    const { userInfo } = getState().user; // Access user slice from the Redux store
-    // Check if userInfo exists
-    if (!userInfo || !userInfo.accessToken) {
-      throw new ApiError(null, "No user information found");
-    }
-
-    const token = userInfo.accessToken;
-
-    // Set headers
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Add the token to the Authorization header
-    };
-
     dispatch(setQuestionsLoading(true)); // Set loading state to true
 
     // Fetch API response
-    const response = await fetchApiResponse(url, {
+    const response = await apiCall(url, {
       method: "GET",
-      headers: headers,
-      query: JSON.stringify(query),
+      params: query,
     });
-    const [data] = response?.data || []; // the first element of the array
-    const question =
-      {
-        questions: data?.questions || [],
-        totalQuestions: data?.totalCount || 0,
-      } || {};
+    console.log("getQuestions -> response", response);
+    const question = response.data[0]; // Extract the data from the response
+    totalcount = response.data[1];
     console.log("data received in question", question);
-    dispatch(setQuestions(question)); // Dispatch the success action with questions data
+    dispatch(setQuestions(question, totalcount)); // Dispatch the success action with questions data
     return response.data; // Return the data to the calling function
   } catch (error) {
     console.error("getQuestions error:", error);

@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiError from "../utils/ApiError";
+import { store } from "../redux/store";
 
 export const getAuthToken = async () => {
-  const authTokenDetails = await AsyncStorage.getItem("authToken");
-  return JSON.parse(authTokenDetails);
+  const user = store.getState().user; // Direct access to user slice of the store
+  const accessToken = user?.userInfo?.accessToken;
+  return accessToken;
 };
 
 export const setAuthToken = async (authTokenDetails) => {
@@ -16,9 +18,9 @@ export const clearAuthToken = async () => {
 
 export const refreshAccessToken = async (refreshEndPoint) => {
   try {
-    // Retrieve the refresh token from AsyncStorage
-    const authTokenDetails = await getAuthToken();
-    console.log("authTokenDetails", authTokenDetails);
+    // Retrieve the refresh token from AsyncStorage only
+    const authToken = await AsyncStorage.getItem("authToken");
+    const authTokenDetails = authToken ? JSON.parse(authToken) : null;
     const { refreshToken } = authTokenDetails || {};
 
     if (!refreshToken) {

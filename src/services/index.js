@@ -4,4 +4,4 @@ export {
   clearAuthToken,
   refreshAccessToken,
 } from "./authService";
-export { fetchApiResponse } from "./apiCall";
+export { apiCall } from "./apiCall";

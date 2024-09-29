@@ -4,6 +4,7 @@ import { ButtonComponent } from "../../components";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { getQuestions, setUser, getQuestionFilterOption } from "../../redux";
+import ImagePickerComponent from "../../utils/imagePicker";
 
 const ProfileEditScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -31,6 +32,20 @@ const ProfileEditScreen = ({ navigation }) => {
     dispatch(getQuestionFilterOption());
   };
 
+  const handleSubmit = async () => {
+    try {
+      await uploadImage(imageUri);
+      Alert.alert("Image uploaded successfully!");
+    } catch (error) {
+      if (error.message.includes("token [expired]")) {
+        // Retry logic: possibly re-fetch a new token and try again
+        Alert.alert("Token expired, please try again.");
+      } else {
+        Alert.alert("Upload failed", error.message);
+      }
+    }
+  };
+
   return (
     <View
       style={{
@@ -46,6 +61,7 @@ const ProfileEditScreen = ({ navigation }) => {
         title="fetch filter options"
         onPress={handelFetchFilterOptions}
       />
+      <ImagePickerComponent />
     </View>
   );
 };
