@@ -1,10 +1,9 @@
 import { setRules, setRulesError, setRulesLoading } from "../slices/ruleSlice";
 import { apiCall } from "../../services/apiCall";
-import { API_URL as TEMP_API_URL } from "../../temp/api";
 import ApiError from "../../utils/ApiError";
 
 const getRules = () => async (dispatch) => {
-  const url = `${process.env.EXPO_PUBLIC_API_URL}/rules/getRules`;
+  const url = `/rules/getRules`;
 
   try {
     dispatch(setRulesLoading(true)); // Set loading state to true

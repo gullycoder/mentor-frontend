@@ -15,22 +15,7 @@ const setAuthToken = async (authTokenDetails) => {
   }
 };
 
-//get auth token from redux state and return it
-
-const getAuthToken = (state) => state.user.userInfo.accessToken;
-console.log("getAuthToken", getAuthToken);
-
-// const getAuthToken = async () => {
-//   try {
-//     const authToken = await AsyncStorage.getItem("authToken");
-//     const authTokenDetails = authToken ? JSON.parse(authToken) : null;
-//     return authTokenDetails;
-//   } catch (error) {
-//     console.error("Failed to get auth token:", error);
-//     throw new ApiError(500, "Failed to get auth token");
-//   }
-// };
-
+// Thunk to get OTP
 const getOtp = (email) => async (dispatch) => {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/users/register`;
   try {
@@ -143,4 +128,4 @@ const refreshAccessToken = async (refreshEndPoint) => {
   }
 };
 
-export { getOtp, verifyOtp, getAuthToken };
+export { getOtp, verifyOtp };

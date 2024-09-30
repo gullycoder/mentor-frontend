@@ -11,14 +11,25 @@ import { useSelector } from "react-redux"; // Use this to get user info from Red
 
 const getQuestions = (query) => async (dispatch, getState) => {
   const url = `${process.env.EXPO_PUBLIC_API_URL}/questions/getQuestions`;
+  console.log("getQuestions -> query", query);
 
   try {
     dispatch(setQuestionsLoading(true)); // Set loading state to true
 
     // Fetch API response
-    const response = await apiCall(url, {
+    const query = {
+      questionSource: "UPSC",
+      questionSubtopic: "India in the 18th Century",
+      questionTopic: "Modern India",
+      questionYear: 2022,
+    };
+
+    const queryString = new URLSearchParams(query).toString();
+    const urlWithParams = `${url}?${queryString}`;
+
+    // Make the API call
+    const response = await apiCall(urlWithParams, {
       method: "GET",
-      params: query,
     });
     console.log("getQuestions -> response", response);
     const question = response.data[0]; // Extract the data from the response

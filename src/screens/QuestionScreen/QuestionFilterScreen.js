@@ -4,6 +4,7 @@ import { Dropdown } from "../../components";
 import { ButtonComponent, LoadingIndicator } from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { getQuestions } from "../../redux";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const QuestionFilterScreen = ({ navigation, route }) => {
   const { source } = route.params;
@@ -37,7 +38,7 @@ const QuestionFilterScreen = ({ navigation, route }) => {
     }
   };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Filter Questions</Text>
 
       {/* Topic Dropdown */}
@@ -80,7 +81,7 @@ const QuestionFilterScreen = ({ navigation, route }) => {
           }}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

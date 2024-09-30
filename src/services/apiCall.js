@@ -1,18 +1,26 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage"; // For token storage
-import { TEMP_API_URL } from "../temp/api";
-import {
-  refreshAccessToken,
-  setAuthToken,
-  clearAuthToken,
-} from "./authService";
 import ApiError from "../utils/ApiError";
+import { globalNavigationRef } from "./NavigationService";
+import { Alert } from "react-native";
+import { store } from "../redux/store";
+import { setUser } from "../redux/slices/userSlice";
 
 // Define the base API URL and Cloudinary URL
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 const CLOUDINARY_BASE_URL = `${process.env.EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME}`;
-// Create an Axios instance
+
+// Create an Axios instance for database requests
 const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  timeout: 5000, // Set a request timeout of 5 seconds
+});
+
+//seperate axios instance for refresh token
+const axiosRefreshInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
@@ -29,14 +37,14 @@ axiosInstance.interceptors.request.use(
 
       // Only attach Authorization header to protected endpoints
       if (
-        !noAuthEndpoints.includes(config.url) &&
+        !noAuthEndpoints.some((endpoint) => config.url.includes(endpoint)) &&
         !config.url.startsWith(CLOUDINARY_BASE_URL)
       ) {
-        console.log("config still adding the auth token");
         const authToken = await AsyncStorage.getItem("authToken");
-        const accessToken = authToken
-          ? JSON.parse(authToken).accessToken
-          : null;
+        const accessToken =
+          store.getState().user.userInfo?.accessToken ||
+          JSON.parse(authToken).accessToken;
+
         if (accessToken) {
           config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -45,7 +53,7 @@ axiosInstance.interceptors.request.use(
       console.error("Error fetching auth token:", error);
       throw new ApiError(401, "Session expired. Please login again.");
     }
-    console.log("config", config);
+    // console.log("config", config);
     return config;
   },
   (error) => {
@@ -68,24 +76,42 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true; // Mark the request as retried
 
       try {
+        console.log("refresh token request");
         const authToken = await AsyncStorage.getItem("authToken");
         const { refreshToken, user } = authToken ? JSON.parse(authToken) : null;
-
+        console.log("refreshToken", refreshToken);
         if (refreshToken) {
-          // Attempt to refresh the access token
-          const refreshResponse = await refreshAccessToken(
-            `${
-              TEMP_API_URL || process.env.EXPO_PUBLIC_API_URL
-            }/users/refreshToken`
+          //request to refresh token with seperate axios instance
+
+          const response = await axiosRefreshInstance.post(
+            "/users/refreshToken",
+            { refreshToken }
           );
+          const refreshResponse = response.data.data;
+          console.log("refreshResponse", refreshResponse);
 
           if (refreshResponse?.accessToken) {
-            // Store the new access token and retry the original request
-            await setAuthToken({
+            // Store the new access token in async storage
+            console.log("efreshResponse?.accessToken-->");
+            const authTokenDetails = {
               accessToken: refreshResponse.accessToken,
-              user,
-              refreshToken,
-            });
+              user: refreshResponse.user,
+              refreshToken: refreshResponse.refreshToken,
+            };
+
+            await AsyncStorage.setItem(
+              "authToken",
+              JSON.stringify(authTokenDetails)
+            );
+
+            // update the access token in redux store from outside the react component or from utility
+
+            store.dispatch(
+              setUser({
+                accessToken: refreshResponse.accessToken,
+                user: refreshResponse.user,
+              })
+            );
 
             originalRequest.headers.Authorization = `Bearer ${refreshResponse.accessToken}`;
             return axiosInstance(originalRequest); // Retry the original request
@@ -93,8 +119,23 @@ axiosInstance.interceptors.response.use(
         }
       } catch (refreshError) {
         console.error("Error refreshing token:", refreshError);
-        await clearAuthToken(); // Clear token if refresh fails
-        throw new ApiError(401, "Session expired. Please login again.");
+
+        // clear async storage
+        await AsyncStorage.removeItem("authToken");
+        // throw new ApiError(401, "Session expired. Please login again.");
+        // component that handling the session expired with popup
+        Alert.alert(
+          "Session Expired",
+          "Your session has expired. Please login again.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                globalNavigationRef("Auth");
+              },
+            },
+          ]
+        );
       }
     }
 
@@ -104,7 +145,7 @@ axiosInstance.interceptors.response.use(
 
 // Utility function for making API requests
 export const apiCall = async (url, options = {}, retries = 2) => {
-  console.log("apiCall -> url", url);
+  console.log("apiCall url  -> ", url);
   try {
     const config = {
       url,
@@ -128,7 +169,6 @@ export const apiCall = async (url, options = {}, retries = 2) => {
     }
 
     if (error.response) {
-      console.log("error yahan pe hai", error.response);
       console.error(
         `API Error [${error.response.status}]: ${error.response.data.message}`
       );

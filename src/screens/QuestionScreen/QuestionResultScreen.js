@@ -3,6 +3,7 @@ import { View, ScrollView, Text, Dimensions, StyleSheet } from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import { colors, typography, spacing } from "../../styles"; // Importing your defined styles
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;

@@ -9,6 +9,10 @@ import ImagePickerComponent from "../../utils/imagePicker";
 const ProfileEditScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
+  const removeToken = async () => {
+    await AsyncStorage.removeItem("authToken");
+  };
+
   const handleLogout = async () => {
     // Clear the user data from the async storage
     await AsyncStorage.removeItem("authToken");
@@ -61,6 +65,7 @@ const ProfileEditScreen = ({ navigation }) => {
         title="fetch filter options"
         onPress={handelFetchFilterOptions}
       />
+      <ButtonComponent title="Remove Token" onPress={removeToken} />
       <ImagePickerComponent />
     </View>
   );

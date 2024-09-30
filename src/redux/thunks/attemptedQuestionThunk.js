@@ -11,26 +11,11 @@ import * as Sentry from "@sentry/react"; // Sentry for error tracking
 // Thunk to get attempted questions
 
 const getTotalQuestionsAttemptedByUser = () => async (dispatch) => {
-  const url = `${process.env.EXPO_PUBLIC_API_URL}/questionAttempts/getTotalQuestionsAttemptedByUser`;
-  // Get userInfo from the userSlice in Redux
-  const { userInfo } = getState().user; // Access user slice from the Redux store
+  const url = `/questionAttempts/getTotalQuestionsAttemptedByUser`;
   try {
-    // Check if userInfo exists
-    if (!userInfo || !userInfo.accessToken) {
-      throw new ApiError(null, "No user information found");
-    }
-    const token = userInfo.accessToken;
-    // Set headers
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // Add the token to the Authorization header
-    };
     dispatch(setAttemptedQuestionsLoading(true)); // Set loading state to true
     // Fetch API response
-    const response = await apiCall(url, {
-      method: "GET",
-      headers: headers,
-    });
+    const response = await apiCall(url);
     const [data] = response?.data || []; // the first element of the array
     const attemptedQuestions = data?.questions || [];
     dispatch(setAttemptedQuestions(attemptedQuestions)); // Dispatch the success action with questions data

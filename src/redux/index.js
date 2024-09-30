@@ -11,7 +11,7 @@ export {
   setAttemptedQuestionsLoading,
   setAttemptedQuestionsError,
 } from "./slices/attemptedQuestionSlice";
-export { getOtp, verifyOtp } from "./thunks/userThunk";
+export { getOtp, verifyOtp, getAuthToken } from "./thunks/userThunk";
 export { getRules } from "./thunks/ruleThunk";
 export { getQuestions } from "./thunks/questionThunk";
 export {

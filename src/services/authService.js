@@ -1,20 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiError from "../utils/ApiError";
-import { store } from "../redux/store";
-
-export const getAuthToken = async () => {
-  const user = store.getState().user; // Direct access to user slice of the store
-  const accessToken = user?.userInfo?.accessToken;
-  return accessToken;
-};
-
-export const setAuthToken = async (authTokenDetails) => {
-  await AsyncStorage.setItem("authToken", JSON.stringify(authTokenDetails));
-};
-
-export const clearAuthToken = async () => {
-  await AsyncStorage.removeItem("authToken");
-};
 
 export const refreshAccessToken = async (refreshEndPoint) => {
   try {
@@ -44,15 +29,6 @@ export const refreshAccessToken = async (refreshEndPoint) => {
     }
 
     const data = await response.json();
-
-    // Save the new access token and refresh token in AsyncStorage
-    const newAuthTokenDetails = {
-      accessToken: data.data.accessToken,
-      user: data.data.user,
-      refreshToken: data.data.refreshToken,
-    };
-
-    await setAuthToken(newAuthTokenDetails);
 
     return data.data.accessToken; // Return the new access token
   } catch (error) {

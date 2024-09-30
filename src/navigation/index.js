@@ -1,10 +1,11 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import MainNavigator from "./MainNavigator";
+import { navigationRef } from "../services";
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <MainNavigator />
     </NavigationContainer>
   );
