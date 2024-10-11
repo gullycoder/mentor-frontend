@@ -15,10 +15,20 @@ import { submitQuestionAttemptedByUser } from "../../redux";
 import { styles as screenStyles } from "./styles";
 import { colors, typography, spacing } from "../../styles";
 
-const QuestionDetailScreens = ({ navigation }) => {
+const QuestionAttemptedDetailScreen = ({ navigation }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [attemptedQuestions, setAttemptedQuestions] = useState([]);
+  const attemptedQuestionDetails = useSelector(
+    (state) => state.attemptedQuestion.attemptedQuestionDetails
+  );
+  console.log(
+    "attemptedQuestionDetails in Details Screen",
+    attemptedQuestionDetails
+  );
+  const [attemptedQuestions, setAttemptedQuestions] = useState(
+    attemptedQuestionDetails || []
+  );
   const dispatch = useDispatch();
+  console.log("attemptedQuestions", attemptedQuestions);
   // Fetching questions from the Redux store
   const { questions, isLoading, error } = useSelector(
     (state) => state.question
@@ -172,15 +182,7 @@ const QuestionDetailScreens = ({ navigation }) => {
             style={{ backgroundColor: colors.background.lighter }}
             textStyle={{ color: colors.text.primary }}
           />
-        ) : (
-          <ButtonComponent
-            title="End"
-            onPress={handleSubmitQuiz}
-            variant="primary"
-            style={{ backgroundColor: colors.background.lighter }}
-            textStyle={{ color: colors.text.primary }}
-          />
-        )}
+        ) : null}
       </View>
 
       {/* Question Card */}
@@ -193,7 +195,7 @@ const QuestionDetailScreens = ({ navigation }) => {
   );
 };
 
-export default QuestionDetailScreens;
+export default QuestionAttemptedDetailScreen;
 
 // Indicator Styles
 const indicatorStyles = StyleSheet.create({

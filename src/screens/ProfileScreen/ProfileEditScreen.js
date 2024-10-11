@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { getQuestions, setUser, getQuestionFilterOption } from "../../redux";
 import ImagePickerComponent from "../../utils/imagePicker";
+import { spacing, scale } from "../../styles";
 
 const ProfileEditScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -50,6 +51,19 @@ const ProfileEditScreen = ({ navigation }) => {
     }
   };
 
+  const checkScaleFunction = () => {
+    const small = scale(spacing.small);
+    const smallMedium = scale(spacing.smallMedium);
+    const medium = scale(spacing.medium);
+    const mediumLarge = scale(spacing.mediumLarge);
+    const large = scale(spacing.large);
+    console.log("small 8", small);
+    console.log("smallMedium12", smallMedium);
+    console.log("medium 16", medium);
+    console.log("mediumLarge 20", mediumLarge);
+    console.log("large 24", large);
+  };
+
   return (
     <View
       style={{
@@ -66,6 +80,10 @@ const ProfileEditScreen = ({ navigation }) => {
         onPress={handelFetchFilterOptions}
       />
       <ButtonComponent title="Remove Token" onPress={removeToken} />
+      <ButtonComponent
+        title="Check Scale Function"
+        onPress={checkScaleFunction}
+      />
       <ImagePickerComponent />
     </View>
   );

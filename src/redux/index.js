@@ -13,8 +13,11 @@ export {
 } from "./slices/attemptedQuestionSlice";
 export { getOtp, verifyOtp, getAuthToken } from "./thunks/userThunk";
 export { getRules } from "./thunks/ruleThunk";
-export { getQuestions } from "./thunks/questionThunk";
 export {
-  getQuestionAttemptedByUser,
+  getQuestions,
+  getAttemptedQuestionDetails,
+} from "./thunks/questionThunk";
+export {
+  getTotalQuestionsAttemptedByUser,
   submitQuestionAttemptedByUser,
 } from "./thunks/attemptedQuestionThunk";

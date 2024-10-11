@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   attemptedQuestions: {},
+  attemptedQuestionDetails: [],
   isAttemptedQuestionsLoading: false,
   attemptedQuestionsError: null,
 };
@@ -12,6 +13,9 @@ const attemptedQuestionSlice = createSlice({
   reducers: {
     setAttemptedQuestions: (state, action) => {
       state.attemptedQuestions = action.payload;
+    },
+    setAttemptedQuestionsDetails: (state, action) => {
+      state.attemptedQuestionDetails = action.payload;
     },
     setAttemptedQuestionsLoading: (state, action) => {
       state.isAttemptedQuestionsLoading = action.payload;
@@ -27,6 +31,7 @@ export const {
   setAttemptedQuestions,
   setAttemptedQuestionsLoading,
   setAttemptedQuestionsError,
+  setAttemptedQuestionsDetails,
 } = attemptedQuestionSlice.actions;
 
 // Export the reducer to be used in store

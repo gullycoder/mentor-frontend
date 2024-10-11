@@ -153,7 +153,12 @@ export const apiCall = async (url, options = {}, retries = 2) => {
       data: options.data, // Use data for POST/PUT requests
       headers: options.headers || {},
     };
-
+    // For GET requests, pass the data as query params
+    if (config.method === "GET" && options.data) {
+      config.params = options.data; // Attach query data for GET requests
+    } else if (options.data) {
+      config.data = options.data; // Use data for POST/PUT requests
+    }
     // If the request includes FormData (for file uploads), let axios handle the multipart Content-Type
     if (options.data instanceof FormData) {
       delete config.headers["Content-Type"]; // Don't set Content-Type manually, let Axios handle it

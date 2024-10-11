@@ -5,6 +5,7 @@ import {
   QuestionDetailScreen,
   QuestionResultScreen,
   QuestionFilterScreen,
+  QuestionAttemptedDetailScreen,
 } from "../screens/QuestionScreen";
 
 const stack = createNativeStackNavigator();
@@ -28,6 +29,10 @@ const QuestionStackNavigator = () => {
       <stack.Screen
         name="QuestionResultScreen"
         component={QuestionResultScreen}
+      />
+      <stack.Screen
+        name="QuestionAttemptedDetailScreen"
+        component={QuestionAttemptedDetailScreen}
       />
     </stack.Navigator>
   );

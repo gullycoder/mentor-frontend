@@ -3,10 +3,8 @@ import {
   setAttemptedQuestionsLoading,
   setAttemptedQuestionsError,
 } from "../slices/attemptedQuestionSlice";
-import { API_URL as TEMP_API_URL } from "../../temp/api";
 import ApiError from "../../utils/ApiError";
 import { apiCall } from "../../services/apiCall";
-import * as Sentry from "@sentry/react"; // Sentry for error tracking
 
 // Thunk to get attempted questions
 
@@ -16,12 +14,13 @@ const getTotalQuestionsAttemptedByUser = () => async (dispatch) => {
     dispatch(setAttemptedQuestionsLoading(true)); // Set loading state to true
     // Fetch API response
     const response = await apiCall(url);
-    const [data] = response?.data || []; // the first element of the array
-    const attemptedQuestions = data?.questions || [];
+    console.log("getTotalQuestionsAttemptedByUser -> response", response);
+    const attemptedQuestions = response?.data || [];
     dispatch(setAttemptedQuestions(attemptedQuestions)); // Dispatch the success action with questions data
     return response.data; // Return the data to the calling function
   } catch {
   } finally {
+    dispatch(setAttemptedQuestionsLoading(false)); // Set loading state to false after error or success
   }
 };
 
@@ -30,7 +29,7 @@ const getTotalQuestionsAttemptedByUser = () => async (dispatch) => {
 const submitQuestionAttemptedByUser =
   (attemptedQuestions) => async (dispatch, getState) => {
     console.log("submitQuestionAttempt Started in thunk", attemptedQuestions);
-    const url = `${process.env.EXPO_PUBLIC_API_URL}/questionAttempts/questionAttemptSubmit`;
+    const url = `/questionAttempts/questionAttemptSubmit`;
     try {
       // Check if attemptedQuestions exists
       if (!attemptedQuestions || attemptedQuestions.length === 0) {

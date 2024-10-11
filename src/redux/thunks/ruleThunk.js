@@ -1,6 +1,7 @@
 import { setRules, setRulesError, setRulesLoading } from "../slices/ruleSlice";
 import { apiCall } from "../../services/apiCall";
 import ApiError from "../../utils/ApiError";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const getRules = () => async (dispatch) => {
   const url = `/rules/getRules`;
@@ -9,15 +10,20 @@ const getRules = () => async (dispatch) => {
     dispatch(setRulesLoading(true)); // Set loading state to true
     const response = await apiCall(url); // Fetch API response
     // console.log("getRules getting data block", response);
-
-    const rulesData = response?.data?.[0] || {};
+    console.log("getRules getting data block", response);
+    const rulesData = response?.data || {};
     const filterOptions = {
-      filterOptions: rulesData?.ruleDetails || {},
-      typingText: rulesData?.typingText || {},
+      filterOptions: rulesData?.filterOptions || {},
+      typingText: rulesData?.typingText || [],
+      mentorshipPlans: rulesData?.mentorshipPlans || [],
     };
-
+    await AsyncStorage.setItem("filterOptions", JSON.stringify(filterOptions)); // Store rules data in local storage
     dispatch(setRules(filterOptions)); // Dispatch the success action with rules data
   } catch (error) {
+    const filterOptions = await AsyncStorage.getItem("filterOptions"); // Fetch rules data from local storage
+    if (filterOptions) {
+      dispatch(setRules(JSON.parse(filterOptions))); // Dispatch the success action with rules data
+    }
     console.log("getRules getting error block");
 
     // Check if error is an instance of ApiError

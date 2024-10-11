@@ -8,25 +8,42 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { ButtonComponent, TypingText } from "../../components";
+import {
+  ButtonComponent,
+  TypingText,
+  LoadingIndicator,
+} from "../../components";
 import { colors, spacing, typography } from "../../styles"; // Import your custom styles
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getTotalQuestionsAttemptedByUser } from "../../redux";
 
 // Data for the changing text
-const typingText = [
-  "to get 115+ in Pre",
-  "to Remember Facts",
-  "to avoid Exam Surprises",
-];
+// const typingText = [
+//   "to get 115+ in Pre",
+//   "to Remember Facts",
+//   "to avoid Exam Surprises",
+// ];
 
 // Data for the grid
-girdArray = ["UPSC", "HPSC", "RPSC", "UPPSC"];
+girdArray = ["UPSC", "Mains coming soon", "State PCS coming soon"];
 // Screen Dimensions
 const { height, width } = Dimensions.get("window");
 
 const QuestionHomeScreen = ({ navigation }) => {
   // Get the rules details from the redux state
   const { rules } = useSelector((state) => state.rule);
+  const { isAttemptedQuestionsLoading } = useSelector(
+    (state) => state.attemptedQuestion
+  );
+  const { typingText } = useSelector((state) => state.rule.rules);
+
+  const dispatch = useDispatch();
+
+  //fetch the attempted questions results from Api
+  const handelFetchAttemptedQuestions = async () => {
+    await dispatch(getTotalQuestionsAttemptedByUser());
+    navigation.navigate("QuestionResultScreen");
+  };
   return (
     <View style={styles.container}>
       {/* Background Image Section */}
@@ -80,10 +97,12 @@ const QuestionHomeScreen = ({ navigation }) => {
           </View>
           <ButtonComponent // Button to navigate to the QuestionResultScreen
             title="View Results"
-            onPress={() => navigation.navigate("QuestionResultScreen")}
+            onPress={handelFetchAttemptedQuestions}
           />
         </View>
       </ScrollView>
+      {/* Loading Indicator */}
+      {isAttemptedQuestionsLoading && <LoadingIndicator />}
     </View>
   );
 };

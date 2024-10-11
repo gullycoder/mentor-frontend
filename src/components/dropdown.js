@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContainer: {
-    marginHorizontal: 20,
+    marginHorizontal: spacing.mediumLarge,
     backgroundColor: colors.surface.light,
-    borderRadius: 10,
+    borderRadius: spacing.mediumLarge * 0.5,
     padding: spacing.medium,
   },
   optionButton: {

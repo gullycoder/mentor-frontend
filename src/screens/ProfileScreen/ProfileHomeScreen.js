@@ -2,10 +2,28 @@ import React from "react";
 import { View, Text, Image, Alert } from "react-native";
 import { ButtonComponent } from "../../components";
 import { colors, spacing, typography } from "../../styles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../../redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfileHomeScreen = ({ navigation }) => {
   const userInfo = useSelector((state) => state.user.userInfo.user);
+  const dispatch = useDispatch();
+
+  const removeToken = async () => {
+    await AsyncStorage.removeItem("authToken");
+  };
+
+  const handleLogoutOk = async () => {
+    // Clear the user data from the async storage
+    await AsyncStorage.removeItem("authToken");
+
+    // Clear the user data from the redux store
+    dispatch(setUser({ userinfo: null }));
+
+    // Navigate to the Splash screen
+    navigation.navigate("Auth");
+  };
 
   console.log("userInfo", userInfo);
   const handleLogout = () => {
@@ -17,8 +35,7 @@ const ProfileHomeScreen = ({ navigation }) => {
       {
         text: "OK",
         onPress: () => {
-          // Handle logout logic
-          console.log("Logged out");
+          handleLogoutOk();
         },
       },
     ]);
@@ -38,12 +55,12 @@ const ProfileHomeScreen = ({ navigation }) => {
       />
       <Text style={styles.name}>{userInfo?.userName || "User Name"}</Text>
       <View style={styles.buttonContainer}>
-        <ButtonComponent
+        {/* <ButtonComponent
           title="Edit"
           onPress={navigateToEditScreen}
           variant="secondary"
           style={styles.editButton}
-        />
+        /> */}
         <ButtonComponent
           title="Logout"
           onPress={handleLogout}

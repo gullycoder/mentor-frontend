@@ -13,9 +13,12 @@ const QuestionFilterScreen = ({ navigation, route }) => {
   const [selectedYear, setSelectedYear] = useState("");
 
   const dispatch = useDispatch();
+  const isQuestionsLoading = useSelector(
+    (state) => state.question.isQuestionsLoading
+  );
 
   //get filterOptions from redux state
-  const filterOptions = useSelector((state) => state.rule.rules.filterOptions);
+  const { filterOptions } = useSelector((state) => state.rule.rules);
   // const { get } = useSelector((state) => state.question);
 
   // Get subtopics based on the selected topic
@@ -31,7 +34,6 @@ const QuestionFilterScreen = ({ navigation, route }) => {
   console.log("selectedFilters", selectedFilters);
   // function to handle the submit button
   const handleSubmit = async () => {
-    console.log("getQuestions", getQuestions);
     const response = await dispatch(getQuestions(selectedFilters));
     if (response) {
       navigation.navigate("QuestionDetailScreen");
@@ -73,7 +75,7 @@ const QuestionFilterScreen = ({ navigation, route }) => {
       )}
 
       {/* Submit Button */}
-      {selectedYear && selectedSubTopic && selectedTopic && (
+      {selectedTopic && (
         <ButtonComponent
           title="Submit"
           onPress={() => {
@@ -81,6 +83,9 @@ const QuestionFilterScreen = ({ navigation, route }) => {
           }}
         />
       )}
+
+      {/* Loading Indicator */}
+      {isQuestionsLoading && <LoadingIndicator />}
     </SafeAreaView>
   );
 };

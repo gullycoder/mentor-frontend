@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  ImageBackground,
-  ActivityIndicator,
-  StyleSheet,
-  Button,
-} from "react-native";
+import { View, ImageBackground, StyleSheet, Button } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/slices/userSlice";
 import { getRules } from "../../redux";
+import { LoadingIndicator } from "../../components";
 
 const SplashScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -68,11 +63,7 @@ const SplashScreen = ({ navigation }) => {
       >
         {/* Loading Icon */}
         {loading ? (
-          <ActivityIndicator
-            size="large"
-            color="#0288d1"
-            style={styles.loader}
-          />
+          <LoadingIndicator />
         ) : error ? (
           <View style={styles.errorContainer}>
             <Button
@@ -97,12 +88,9 @@ const styles = StyleSheet.create({
   backgroundImage: {
     width: "100%",
     height: "100%",
+    // aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  loader: {
-    position: "absolute",
-    bottom: 50, // Position the loader at the bottom
   },
 });
 

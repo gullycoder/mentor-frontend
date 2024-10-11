@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     ...typography.label,
   },
   input: {
-    height: 48,
+    height: spacing.large * 2,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.medium,

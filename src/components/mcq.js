@@ -200,11 +200,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     resizeMode: "contain",
-    marginTop: 16,
+    marginTop: spacing.medium,
   },
   navigationContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 16,
+    marginTop: spacing.medium,
   },
 });
