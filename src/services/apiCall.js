@@ -16,7 +16,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 5000, // Set a request timeout of 5 seconds
+  timeout: 50000, // Set a request timeout of 50 seconds
 });
 
 //seperate axios instance for refresh token
