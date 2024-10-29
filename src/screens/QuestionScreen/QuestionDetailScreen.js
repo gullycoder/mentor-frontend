@@ -133,7 +133,9 @@ const QuestionDetailScreens = ({ navigation }) => {
   if (!currentQuestion) {
     return (
       <View style={noQuestionStyle.noQuestionsContainer}>
-        <Text>No questions available</Text>
+        <Text style={noQuestionStyle.noQuestionStyleText}>
+          No questions available
+        </Text>
       </View>
     );
   }
@@ -250,6 +252,10 @@ const noQuestionStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.background.default,
+  },
+  noQuestionStyleText: {
+    ...typography.heading1,
+    color: colors.text.primary,
   },
   errorContainer: {
     flex: 1,

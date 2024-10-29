@@ -2,6 +2,7 @@ import {
   setQuestions,
   setQuestionsError,
   setQuestionsLoading,
+  setQuestionAnalysis,
 } from "../slices/questionSlice";
 import {
   setAttemptedQuestions,
@@ -9,11 +10,9 @@ import {
   setAttemptedQuestionsError,
   setAttemptedQuestionsDetails,
 } from "../slices/attemptedQuestionSlice";
-import { API_URL as TEMP_API_URL } from "../../temp/api";
 import ApiError from "../../utils/ApiError";
 import { apiCall } from "../../services/apiCall";
 import * as Sentry from "@sentry/react"; // Sentry for error tracking
-import { useSelector } from "react-redux"; // Use this to get user info from Redux
 
 const getQuestions = (query) => async (dispatch) => {
   const url = `/questions/getQuestions`;
@@ -26,10 +25,8 @@ const getQuestions = (query) => async (dispatch) => {
       method: "GET",
       data: query,
     });
-    console.log("getQuestions -> response", response);
     const question = response.data[0]; // Extract the data from the response
     totalcount = response.data[1];
-    console.log("data received in question", question);
     dispatch(setQuestions(question, totalcount)); // Dispatch the success action with questions data
     return response.data; // Return the data to the calling function
   } catch (error) {
@@ -132,4 +129,40 @@ const getAttemptedQuestionDetails = (query) => async (dispatch) => {
   }
 };
 
-export { getQuestions, getAttemptedQuestions, getAttemptedQuestionDetails };
+//get the question analysis based on the query parameters
+
+const getQuestionAnalysis = (query) => async (dispatch) => {
+  try {
+    const url = `/questions/getQuestionAnalysis`;
+    dispatch(setQuestionsLoading(true)); // Set loading state to true
+    // Fetch API response
+    const response = await apiCall(url, {
+      method: "GET",
+      data: query,
+    });
+    console.log(" getQuestionAnalysis response", response);
+    const questionAnalysis = response.data[0] || {}; // Extract the data from the response
+    dispatch(setQuestionAnalysis(questionAnalysis)); // Dispatch the success action with question analysis data
+    return response.data; // Return the data to the calling function
+  } catch (error) {
+    console.error("getQuestionAnalysis error:", error);
+    // Check if the error is an instance of ApiError for more structured error handling
+    if (error instanceof ApiError) {
+      error.logError(); // Log the error for further debugging
+      dispatch(setQuestionsError(error.message)); // Dispatch error to update state
+    } else {
+      // If the error is not an instance of ApiError, handle it as an unexpected error
+      console.error("Unexpected error:", error);
+      dispatch(setQuestionsError(error.message || "An unknown error occurred"));
+    }
+  } finally {
+    dispatch(setQuestionsLoading(false)); // Set loading state to false after error or success
+  }
+};
+
+export {
+  getQuestions,
+  getAttemptedQuestions,
+  getAttemptedQuestionDetails,
+  getQuestionAnalysis,
+};

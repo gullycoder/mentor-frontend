@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { ButtonComponent } from "../components/button"; //
-import { colors, typography, spacing } from "../styles";
+import { colors, typography, spacing, width } from "../styles";
 
 export const QuestionCard = ({
   currentQuestion,

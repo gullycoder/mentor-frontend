@@ -17,15 +17,6 @@ import { colors, spacing, typography } from "../../styles"; // Import your custo
 import { useSelector, useDispatch } from "react-redux";
 import { getTotalQuestionsAttemptedByUser } from "../../redux";
 
-// Data for the changing text
-// const typingText = [
-//   "to get 115+ in Pre",
-//   "to Remember Facts",
-//   "to avoid Exam Surprises",
-// ];
-
-// Data for the grid
-girdArray = ["UPSC", "Mains coming soon", "State PCS coming soon"];
 // Screen Dimensions
 const { height, width } = Dimensions.get("window");
 
@@ -35,8 +26,14 @@ const QuestionHomeScreen = ({ navigation }) => {
   const { isAttemptedQuestionsLoading } = useSelector(
     (state) => state.attemptedQuestion
   );
-  const { typingText } = useSelector((state) => state.rule.rules);
-
+  const { typingText, examContents } = useSelector((state) => state.rule.rules);
+  console.log("examContents", examContents);
+  // Data for the grid
+  const girdArray = examContents.examName || [
+    "UPSC",
+    "Mains coming soon",
+    "State PCS coming soon",
+  ];
   const dispatch = useDispatch();
 
   //fetch the attempted questions results from Api
@@ -44,6 +41,16 @@ const QuestionHomeScreen = ({ navigation }) => {
     await dispatch(getTotalQuestionsAttemptedByUser());
     navigation.navigate("QuestionResultScreen");
   };
+
+  //navigation logic
+  const handelNavigation = (source, topic) => {
+    navigation.navigate(
+      topic === "PYQs" ? "QuestionFilterScreen" : "QuestionAnalysisScreen", // Navigate to the QuestionFilterScreen if the topic is PYQs, else navigate to the QuestionAnalysisScreen
+
+      { source: source } // Pass the selected source to the next screen
+    );
+  };
+
   return (
     <View style={styles.container}>
       {/* Background Image Section */}
@@ -69,31 +76,27 @@ const QuestionHomeScreen = ({ navigation }) => {
           <Text style={styles.heading}>Start your practice now:</Text>
 
           <View style={styles.grid}>
-            {girdArray.map((source, index) => (
-              <View key={index} style={styles.block}>
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate(
-                      "QuestionFilterScreen",
-
-                      { source: source } // Pass the selected source to the next screen
-                    )
-                  }
-                >
-                  <Text
-                    style={[styles.blockText, { color: colors.primary.main }]}
+            {girdArray.map((source, index) =>
+              examContents.examContent[source]?.map((topic, index) => (
+                <View key={index} style={styles.block}>
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => handelNavigation(source, topic)}
                   >
-                    {source}
-                  </Text>
-                  <Text
-                    style={[styles.blockText]} // Change the color of the text
-                  >
-                    {"PYQs"}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+                    <Text
+                      style={[styles.blockText, { color: colors.primary.main }]}
+                    >
+                      {source}
+                    </Text>
+                    <Text
+                      style={[styles.blockText]} // Change the color of the text
+                    >
+                      {topic}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))
+            )}
           </View>
           <ButtonComponent // Button to navigate to the QuestionResultScreen
             title="View Results"

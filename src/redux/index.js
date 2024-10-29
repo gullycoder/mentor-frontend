@@ -16,6 +16,7 @@ export { getRules } from "./thunks/ruleThunk";
 export {
   getQuestions,
   getAttemptedQuestionDetails,
+  getQuestionAnalysis,
 } from "./thunks/questionThunk";
 export {
   getTotalQuestionsAttemptedByUser,

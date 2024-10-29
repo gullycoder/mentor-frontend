@@ -16,6 +16,7 @@ const getRules = () => async (dispatch) => {
       filterOptions: rulesData?.filterOptions || {},
       typingText: rulesData?.typingText || [],
       mentorshipPlans: rulesData?.mentorshipPlans || [],
+      examContents: rulesData?.examContents[0] || {},
     };
     await AsyncStorage.setItem("filterOptions", JSON.stringify(filterOptions)); // Store rules data in local storage
     dispatch(setRules(filterOptions)); // Dispatch the success action with rules data

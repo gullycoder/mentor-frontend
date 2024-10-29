@@ -7,3 +7,4 @@ export { Dropdown } from "./dropdown";
 export { TypingText } from "./typingText";
 export { LoadingIndicator } from "./loader";
 export { LoadingOverlay } from "./loadingOverlay";
+export { AnalysisComponent } from "./analysisPyqs";

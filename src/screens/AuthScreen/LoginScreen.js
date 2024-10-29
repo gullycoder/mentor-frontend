@@ -47,8 +47,12 @@ const LoginScreen = ({ navigation }) => {
         setIsEmailInputDisabled(false);
         dispatch(setError(null));
         await dispatch(getRules());
-        //navigate to the home screen
-        navigation.navigate("Main");
+        //navigate to the home screen with reset stack
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        });
+        // navigation.navigate("Main");
       } else {
         //show the error in alert
         if (reponse.message === "Invalid OTP") {
