@@ -99,7 +99,7 @@ const QuestionHomeScreen = ({ navigation }) => {
             )}
           </View>
           <ButtonComponent // Button to navigate to the QuestionResultScreen
-            title="View Results"
+            title="View Your Performance"
             onPress={handelFetchAttemptedQuestions}
           />
         </View>
